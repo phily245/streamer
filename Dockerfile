@@ -1,9 +1,7 @@
 FROM debian:buster-slim
 
 ENV NGINX_VERSION=1.18.0
-#ENV NJS_VERSION     0.4.4
-#ENV PKG_RELEASE     1~buster
-#ENV CUSTOM_MODULES "--with-file-aio --with-http_auth_request_module --with-http_ssl_module"
+ENV CUSTOM_MODULES "--with-file-aio --with-http_auth_request_module --with-http_ssl_module"
 
 RUN apt update && \
     apt install -y \
@@ -22,7 +20,7 @@ RUN addgroup --system --gid 1001 nginx \
 
 WORKDIR /tmp
 
-RUN wget http://nginx.org/download/nginx-$NGINX_VERSION.tar.gz
+RUN wget -O http://nginx.org/download/nginx-$NGINX_VERSION.tar.gz
 
 RUN echo $(pwd)
 
