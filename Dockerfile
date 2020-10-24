@@ -28,13 +28,15 @@ RUN tar -xzvf nginx-$NGINX_VERSION.tar.gz
 
 RUN git clone "https://github.com/sergey-dryabzhinsky/nginx-rtmp-module.git"
 
-RUN ls
-
-RUN pwd
-
 RUN cd nginx-$NGINX_VERSION && ./configure --sbin-path=/usr/sbin/nginx --conf-path=/etc/nginx/nginx.conf --add-module=/tmp/nginx-rtmp-module $CUSTOM_MODULES
 
 RUN cd nginx-$NGINX_VERSION &&  make && make install
+
+COPY templates/nginx/nginx.conf /etc/nginx/nginx.conf
+
+RUN mkdir -p /home/videos/vod && mkdir -p /home/videos/recordings
+
+RUN rm -rf nginx*
 
 RUN nginx -t
 
