@@ -20,7 +20,7 @@ RUN addgroup --system --gid 1001 nginx \
 
 WORKDIR /tmp
 
-RUN wget -O http://nginx.org/download/nginx-$NGINX_VERSION.tar.gz
+RUN wget http://nginx.org/download/nginx-$NGINX_VERSION.tar.gz
 
 RUN echo $(pwd)
 
