@@ -36,6 +36,8 @@ COPY templates/nginx/nginx.conf /etc/nginx/nginx.conf
 
 RUN mkdir -p /home/videos/vod && mkdir -p /home/videos/recordings
 
+RUN touch /home/videos/recordings/auth
+
 RUN rm -rf nginx*
 
 RUN nginx -t
