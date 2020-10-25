@@ -38,8 +38,36 @@ docker run --network host -p 1935:1935 -p 8080:80 -d --name streamz phily245/str
 
 #### Volume Mounting
 
-Docker containers are disposable and easily torn down. When this happens, as docker containers are virtual file systems they hold all of the stream data and recorded streams without [mounting volumes](https://docs.docker.com/storage/volumes/) your vidoes are stored in this volatile storatge. It's higly recommended to map `/home/videos` to a file location outside of the docker image, e.g. to the host or to a kubernetes volume for example. The recommended way of doing this is using the `-v` flag:
+Docker containers are disposable and easily torn down. When this happens, as docker containers are virtual file systems they hold all of the stream data and recorded streams without [mounting volumes](https://docs.docker.com/storage/volumes/) your vidoes are stored in this volatile storage. It's higly recommended to map `/home/videos` to a file location outside of the docker image, e.g. to the host or to a kubernetes volume for example. The recommended way of doing this is using the `-v` flag:
 
 ```bash
 docker run -v /path/to/storage:/home/videos phily245/streamer
 ```
+
+### Authentication
+
+Authentication is turned off by default. To enable authetication, you need to provide a URL that can perform the authentication, this way we can keep this dockerfile language agnostic. there are two build variables we can set to configure this:
+
+* `RTMP_AUTH_URL`: Authentication for users attempting to stream to your container via RTMP
+* `HTL_AUTH_URL`: Authentication for users trying to consume streams from your container over HLS
+
+This expects a HTTP status code of 200 in the response to pass validation and 401 to fail validation. 
+
+A quick and dirty example of how to achieve this in PHP using BASIC auth would look a little like this:
+
+```php
+<?php
+if (empty($_SERVER['PHP_AUTH_USER']) === false || empty($_SERVER['PHP_AUTH_PW']) === false) {
+    http_response_code(401);
+    die;
+}
+
+if ($_SERVER['PHP_AUTH_USER'] === 'foo' && $_SERVER['PHP_AUTH_PW'] === 'bar') {
+    http_response_code(200;)
+    die;
+}
+
+http_response_code(401);
+
+```
+
