@@ -63,7 +63,7 @@ if (empty($_SERVER['PHP_AUTH_USER']) === false || empty($_SERVER['PHP_AUTH_PW'])
 }
 
 if ($_SERVER['PHP_AUTH_USER'] === 'foo' && $_SERVER['PHP_AUTH_PW'] === 'bar') {
-    http_response_code(200;)
+    http_response_code(200);
     die;
 }
 
