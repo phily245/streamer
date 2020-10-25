@@ -37,8 +37,8 @@ COPY templates/nginx/nginx.conf /etc/nginx/nginx.conf
 ARG RTMP_AUTH_URL=http://localhost/auth
 ARG HLS_AUTH_URL=http://localhost/auth
 
-RUN sed "s/auth_request +http:\/\/localhost\/auth;$/auth_request $(printf '%s\n' "$RTMP_AUTH_URL" | sed -e 's/[\/&]/\\&/g');/s"
-RUN sed "s/on_publish +http:\/\/localhost\/auth;$/on_publish $(printf '%s\n' "$RTMP_AUTH_URL" | sed -e 's/[\/&]/\\&/g');/s" /etc/nginx/nginx.conf
+RUN sed -i "s/proxy_pass              http:\/\/localhost\/rtmp-auth;/proxy_pass              $(printf '%s\n' "$RTMP_AUTH_URL" | sed -e 's/[\/&]/\\&/g');/g" /etc/nginx/nginx.conf
+RUN sed -i "s/proxy_pass              http:\/\/localhost\/hls-auth;/proxy_pass              $(printf '%s\n' "$HLS_AUTH_URL" | sed -e 's/[\/&]/\\&/g');/g" /etc/nginx/nginx.conf
 
 RUN mkdir -p /home/videos/vod && mkdir -p /home/videos/recordings
 
